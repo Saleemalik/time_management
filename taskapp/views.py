@@ -19,7 +19,7 @@ class LoginView(View):
     
 
 class HomeView(View):
-    template_name = 'login.html'
+    template_name = 'home.html'
 
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name)
