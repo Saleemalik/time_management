@@ -6,17 +6,17 @@ from rest_framework_simplejwt.views import (
 )
 
 from .views import (UserViewSet, LoginView,
-                    HomeView)
+                    HomeView, RegisterView)
 
 
 router = routers.DefaultRouter()
 router.register('users', UserViewSet)
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path('', HomeView.as_view(), name='home'),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('login/', LoginView.as_view(), name='login'),
-    path('home/', HomeView.as_view(), name='home')
+    path('register/', RegisterView.as_view(), name='home')
 
 ]

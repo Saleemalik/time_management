@@ -21,6 +21,12 @@ class LoginView(View):
 class HomeView(View):
     template_name = 'home.html'
 
+    def get(self, request):
+        return render(request, self.template_name)
+    
+class RegisterView(View):
+    template_name = 'register.html'
+
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name)
     

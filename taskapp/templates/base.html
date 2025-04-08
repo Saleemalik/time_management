@@ -21,21 +21,27 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
-        {% comment %} const authURL = url => {
-            const accessToken = localStorage.getItem('accessToken')
-            axios.get(url,  {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                }
-            })
-            .then(response => {
-                console.log('Success')
-            })
-            .catch(error => {
-                console.log = error
-            })
-        } {% endcomment %}
+      let accessToken = null;
+      let refreshToken = null;
 
+      const api = axios.create({
+        baseURL: '/',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      })
+
+      api.interceptors.request.use(
+        (config) => {
+          if(accessToken){
+            config.headers['Authorization'] = `Bearer ${accessToken}`;
+          }
+          return config;
+        }
+        (error) =>{
+          return Promise.reject(error);
+        }
+      )
     </script>
 
 
