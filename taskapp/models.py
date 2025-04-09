@@ -23,3 +23,6 @@ class Task(models.Model):
     status = models.CharField(max_length=15, choices=status_choices, default='PENDING')
     created_at = models.DateTimeField(auto_now_add=True)
     
+    class Meta:
+        ordering = ['-id']
+    

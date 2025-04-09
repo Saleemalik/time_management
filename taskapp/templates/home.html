@@ -16,6 +16,8 @@
                 <button class="btn btn-sm btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#createModal">New Task</button>
             </div>
             {% include "createTask.html" %}
+            {% include "editTask.html" %}
+
             <!-- Modal -->
            
         </div>
@@ -98,6 +100,26 @@
         }
 
         document.addEventListener('DOMContentLoaded', LoadUserTasks)
+
+        const editTask = taskId => {
+            axios.get(`/api/tasks/${taskId}/`)
+            .then(response => {
+                const task = response.data;
+                document.getElementById('task-id').value = task.id;
+                document.getElementById('edit-title').value = task.title;
+                document.getElementById('edit-description').value = task.description;
+                document.getElementById('edit-priority').value = task.priority;
+                document.getElementById('edit-status').value = task.status;
+
+                // Show modal
+                const modal = new bootstrap.Modal(document.getElementById('editModal'));
+                modal.show();
+            })
+            .catch(error => {
+                console.error('Failed to fetch task:', error);
+                alert("Could not load task data.");
+            });
+        }
 
 
     </script>

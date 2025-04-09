@@ -1,0 +1,84 @@
+
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel"
+aria-hidden="true">
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="editModalLabel">Edit Task</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="editForm">
+        <div class="modal-body">
+            <input type="text" class="form-control" id="task-id" aria-describedby="edit-title" placeholder="Enter Title" hidden>
+
+                <div class="form-group">
+                  <label for="edit-title">Title</label>
+                  <input type="text" class="form-control" id="edit-title" aria-describedby="edit-title" placeholder="Enter Title" Required>
+                </div>
+                <div class="form-group">
+                  <label for="edit-description">Description</label>
+                  <textarea class="form-control" id="edit-description" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="edit-priority">Priority Level</label>
+                    <select id="edit-priority" class="form-select" aria-label="Priority">
+                        <option value="LOW">LOW</option>
+                        <option value="MEDIUM" selected>MEDIUM</option>
+                        <option value="HIGH">HIGH</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="edit-status">Status</label>
+                    <select id="edit-status" class="form-select" aria-label="Status">
+                        <option value="PENDING" selected>PENDING</option>
+                        <option value="COMPLETED">COMPLETED</option>
+                      </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</div>
+<script>
+    const taskId = document.querySelector("#task-id")
+    const editTitle = document.querySelector("#edit-title")
+    const editDescription = document.querySelector("#edit-description")
+    const editPriority = document.querySelector("#edit-priority")
+    const editStatus = document.querySelector("#edit-status")
+    const editModal = document.getElementById("editModal");
+
+
+    // Add reset when modal is hidden
+    editModal.addEventListener('hidden.bs.modal', function (event) {
+        resetFormFields();
+    });
+
+    document.getElementById("editForm").addEventListener("submit", function(e){
+        e.preventDefault()
+    
+        axios.put(`/api/tasks/${taskId.value}/`, {
+            title: editTitle.value,
+            description: editDescription.value,
+            priority: editPriority.value,
+            status: editStatus.value,
+        })
+        .then(response=>{
+            console.log(response)
+            if(response.status == 200) {
+                alert("Task updated Successfully")
+            }
+            const modalInstance = bootstrap.Modal.getInstance(editModal) || new bootstrap.Modal(editModal);
+            modalInstance.hide();
+           
+        })
+        .catch(error => {
+          console.log(error)
+            alert(`Task Creation Failed: ${JSON.stringify(error.response.data) }`)
+        })
+    })
+</script>
+
