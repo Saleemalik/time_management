@@ -6,7 +6,7 @@ from rest_framework_simplejwt.views import (
 )
 
 from .views import (UserViewSet, LoginView,
-                    HomeView, RegisterView)
+                    HomeView, RegisterView, RegisterAPIView)
 
 
 router = routers.DefaultRouter()
@@ -14,6 +14,8 @@ router.register('users', UserViewSet)
 
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),
+    path('api/', include(router.urls)),
+    path('api/register/', RegisterAPIView.as_view(), name='api_register' ),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('login/', LoginView.as_view(), name='login'),
