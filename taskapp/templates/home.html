@@ -2,7 +2,7 @@
 {% block content %}
 <br>
 <h1 class="text-center">Home PAGE</h1>
-<h2 class="text-center">Welcome, {{request.user}}</h2>
+<h2 class="text-center">Welcome, <span id="user-name"></span></h2>
 <hr>
 <br>
 <br>
@@ -119,10 +119,25 @@
                 getTasks(tasks)
                 updatePaginateBtn(previous, next)
             })
+            .catch(error=>{
+                alert(JSON.stringify(error.response.data))
+                window.location.href = "/login/"
+            })
 
         }
+        const authenticatedCheck = () => {
+            axios.get('/user/me/').then(response => {
+                document.getElementById("user-name").innerHTML = response.data.username
+            })
+            .catch(error=>{
+                console.log(JSON.stringify(error.response.data))
+            })
+        }
 
-        document.addEventListener('DOMContentLoaded', LoadUserTasks)
+        document.addEventListener('DOMContentLoaded',  function () {
+            LoadUserTasks()
+            authenticatedCheck()
+        } )
 
         const editTask = taskId => {
             axios.get(`/api/tasks/${taskId}/`)

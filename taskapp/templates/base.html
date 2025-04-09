@@ -23,32 +23,16 @@
     <script>
       axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
       axios.defaults.xsrfCookieName = "csrftoken";
-
+      axios.defaults.baseURL = '/';
+      axios.defaults.headers =  {
+        'Content-Type': 'application/json',
+      }
+      const accessToken = localStorage.getItem('accessToken')
+      if (accessToken) {
+        axios.defaults.headers['Authorization'] = `Bearer ${accessToken}`
+      }
     </script>
-    {% comment %} <script>
-      let accessToken = null;
-      let refreshToken = null;
-
-      const api = axios.create({
-        baseURL: '/',
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      })
-
-      api.interceptors.request.use(
-        (config) => {
-          if(accessToken){
-            config.headers['Authorization'] = `Bearer ${accessToken}`;
-          }
-          return config;
-        }
-        (error) =>{
-          return Promise.reject(error);
-        }
-      )
-    </script> {% endcomment %}
-
+     
 
     <!-- Option 2: Separate Popper and Bootstrap JS -->
     <!--

@@ -44,9 +44,27 @@ class RegisterAPIView(APIView):
 class TaskModelViewSet(ModelViewSet):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
-    permission_classes = [AllowAny,]
+    permission_classes = [IsAuthenticated,]
+    
+    def create(self, request, *args, **kwargs):
+        user = request.user
+        request.data['user'] = user.pk
+        return super().create(request, *args, **kwargs)
+    
+    def update(self, request, *args, **kwargs):
+        user = request.user
+        request.data['user'] = user.pk
+        return super().update(request, *args, **kwargs)
+
 
 # ViewSets define the view behavior.
-class UserViewSet(ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+class UserView(APIView):
+    """Get current user details"""
+    permission_classes = [IsAuthenticated, ]
+
+    def get(self, request):
+        """
+        Return current userDetails.
+        """
+        user = UserSerializer(request.user).data
+        return Response(user)

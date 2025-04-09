@@ -5,16 +5,17 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 
-from .views import (UserViewSet, LoginView,HomeView, 
+from .views import (UserView, LoginView,HomeView, 
                     RegisterView, RegisterAPIView, TaskModelViewSet)
 
 
 router = routers.DefaultRouter()
-router.register('users', UserViewSet)
 router.register('tasks', TaskModelViewSet)
 
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),
+    path('user/me/', UserView.as_view(), name='me'),
+    
     path('api/', include(router.urls)),
     path('api/register/', RegisterAPIView.as_view(), name='api_register' ),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
