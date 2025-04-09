@@ -46,6 +46,10 @@ class TaskModelViewSet(ModelViewSet):
     serializer_class = TaskSerializer
     permission_classes = [IsAuthenticated,]
     
+    def get_queryset(self):
+        queryset = self.queryset.filter(user=self.request.user)
+        return queryset
+
     def create(self, request, *args, **kwargs):
         user = request.user
         request.data['user'] = user.pk
