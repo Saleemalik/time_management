@@ -3,6 +3,12 @@
 <br>
 <h1 class="text-center">Home PAGE</h1>
 <h2 class="text-center">Welcome, <span id="user-name"></span></h2>
+<div class="d-flex justify-content-end">
+
+    <button type="button" class="btn btn-primary m-4" data-bs-toggle="modal" data-bs-target="#logoutModal">
+        Logout
+      </button>
+</div>
 <hr>
 <br>
 <br>
@@ -36,6 +42,27 @@
                 <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <button type="button" onclick="deleteTask()" class="btn btn-danger">Delete</button>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="LogoutModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="LogoutModalLabel">Confirm Logout</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" class="form-control" id="task-id-delete" aria-describedby="edit-title" placeholder="Enter Title" hidden>
+                    <span>
+                        Are You sure, You want to Logout?
+                    </span>
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" onclick="logout()" class="btn btn-danger">Confirm</button>
                 </div>
             </div>
             </div>
@@ -120,8 +147,7 @@
                 updatePaginateBtn(previous, next)
             })
             .catch(error=>{
-                alert(JSON.stringify(error.response.data))
-                window.location.href = "/login/"
+                console.log(JSON.stringify(error.response.data))
             })
 
         }
@@ -130,7 +156,8 @@
                 document.getElementById("user-name").innerHTML = response.data.username
             })
             .catch(error=>{
-                console.log(JSON.stringify(error.response.data))
+                alert(JSON.stringify(error.response.data))
+                window.location.href = "/login/"
             })
         }
 
@@ -166,6 +193,8 @@
         }
 
         const deleteModal = document.getElementById("deleteModal");
+        const logoutModal = document.getElementById("logoutModal");
+
 
 
         const deleteTask = () => {
@@ -182,7 +211,12 @@
                 alert("Could not load task data.");
             });
         }
-
+        const logout = () => {
+            localStorage.removeItem('accessToken')
+            const modalInstance = bootstrap.Modal.getInstance(logoutModal) || new bootstrap.Modal(logoutModal);
+            modalInstance.hide();
+            window.location.href = "/login/"
+        }
 
     </script>
     {% endblock %}
