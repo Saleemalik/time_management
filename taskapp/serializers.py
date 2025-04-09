@@ -2,6 +2,7 @@
 
 from rest_framework import serializers
 from django.contrib.auth.models import User
+from .models import Task
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -22,3 +23,9 @@ class RegisterSerializer(serializers.ModelSerializer):
         user.set_password(validated_data['password'])
         user.save()
         return user  
+    
+    
+class TaskSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Task
+        fields = '__all__'

@@ -11,15 +11,15 @@ class Task(models.Model):
     user = models.ForeignKey(User, verbose_name=_(""), on_delete=models.CASCADE)
     description = models.TextField()
     priority_choices = (
-        ('LOW', 'low'),
+        ('LOW', 'LOW'),
         ('MEDIUM', 'MEDIUM'),
-        ('HIGH', 'HiGH'),
+        ('HIGH', 'HIGH'),
     )
     priority = models.CharField(max_length=15, choices=priority_choices, default='MEDIUM')
     status_choices = (
         ('PENDING', 'PENDING'),
         ('COMPLETED', 'COMPLETED'),
     )
-    status = models.CharField(max_length=15, choices=priority_choices, default='PENDING')
+    status = models.CharField(max_length=15, choices=status_choices, default='PENDING')
     created_at = models.DateTimeField(auto_now_add=True)
     

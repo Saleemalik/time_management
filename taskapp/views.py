@@ -6,7 +6,8 @@ from django.contrib.auth.models import User
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .serializers import UserSerializer, RegisterSerializer
+from .serializers import UserSerializer, RegisterSerializer, TaskSerializer
+from .models import Task
 
 # Create your views here.
 
@@ -40,7 +41,10 @@ class RegisterAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-    
+class TaskModelViewSet(ModelViewSet):
+    queryset = Task.objects.all()
+    serializer_class = TaskSerializer
+    permission_classes = [AllowAny,]
 
 # ViewSets define the view behavior.
 class UserViewSet(ModelViewSet):

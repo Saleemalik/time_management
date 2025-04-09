@@ -5,12 +5,13 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 
-from .views import (UserViewSet, LoginView,
-                    HomeView, RegisterView, RegisterAPIView)
+from .views import (UserViewSet, LoginView,HomeView, 
+                    RegisterView, RegisterAPIView, TaskModelViewSet)
 
 
 router = routers.DefaultRouter()
 router.register('users', UserViewSet)
+router.register('tasks', TaskModelViewSet)
 
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),
