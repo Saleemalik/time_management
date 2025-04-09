@@ -62,10 +62,7 @@ aria-hidden="true">
 
     document.getElementById("createForm").addEventListener("submit", function(e){
         e.preventDefault()
-    
-        
 
-        
         axios.post('/api/tasks/', {
             title: title.value,
             description: description.value,
@@ -79,6 +76,7 @@ aria-hidden="true">
             }
             const modalInstance = bootstrap.Modal.getInstance(createModal) || new bootstrap.Modal(createModal);
             modalInstance.hide();
+            LoadUserTasks()
            
         })
         .catch(error => {

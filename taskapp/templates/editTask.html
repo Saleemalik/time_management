@@ -67,12 +67,12 @@ aria-hidden="true">
             status: editStatus.value,
         })
         .then(response=>{
-            console.log(response)
             if(response.status == 200) {
                 alert("Task updated Successfully")
             }
             const modalInstance = bootstrap.Modal.getInstance(editModal) || new bootstrap.Modal(editModal);
             modalInstance.hide();
+            LoadUserTasks()
            
         })
         .catch(error => {

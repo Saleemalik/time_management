@@ -18,6 +18,29 @@
             {% include "createTask.html" %}
             {% include "editTask.html" %}
 
+  
+        <!-- Modal -->
+        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" class="form-control" id="task-id-delete" aria-describedby="edit-title" placeholder="Enter Title" hidden>
+                    <span>
+                        Are You sure, You want to delete this Task?
+                    </span>
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" onclick="deleteTask()" class="btn btn-danger">Delete</button>
+                </div>
+            </div>
+            </div>
+        </div>
+
             <!-- Modal -->
            
         </div>
@@ -61,7 +84,7 @@
                 <td>${task.status}</td>
                 <td>
                     <button class="btn btn-sm btn-warning" onclick="editTask(${task.id})">Edit</button>
-                    <button class="btn btn-sm btn-danger" onclick="deleteTask(${task.id})">Delete</button>
+                    <button class="btn btn-sm btn-danger" onclick="confirmModal(${task.id})">Delete</button>
                 </td>
                     `
                 tbody.appendChild(row)
@@ -114,6 +137,30 @@
                 // Show modal
                 const modal = new bootstrap.Modal(document.getElementById('editModal'));
                 modal.show();
+            })
+            .catch(error => {
+                console.error('Failed to fetch task:', error);
+                alert("Could not load task data.");
+            });
+        }
+
+        const confirmModal = (taskId) => {
+            document.getElementById('task-id-delete').value = taskId;
+            const modal = new bootstrap.Modal(document.getElementById('deleteModal'));
+            modal.show();
+        }
+
+        const deleteModal = document.getElementById("deleteModal");
+
+
+        const deleteTask = () => {
+            const taskId = document.getElementById("task-id-delete").value
+            axios.delete(`/api/tasks/${taskId}/`)
+            .then(response => {
+                alert("Task Deleted Successfully")
+                const modalInstance = bootstrap.Modal.getInstance(deleteModal) || new bootstrap.Modal(deleteModal);
+                modalInstance.hide();
+                LoadUserTasks()
             })
             .catch(error => {
                 console.error('Failed to fetch task:', error);
