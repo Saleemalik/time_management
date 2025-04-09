@@ -1,0 +1,90 @@
+
+<div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel"
+aria-hidden="true">
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="createModalLabel">New Task</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="createForm">
+        <div class="modal-body">
+                <div class="form-group">
+                  <label for="title">Title</label>
+                  <input type="text" class="form-control" id="title" aria-describedby="title" placeholder="Enter Title" Required>
+                </div>
+                <div class="form-group">
+                  <label for="description">Description</label>
+                  <textarea class="form-control" id="description" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="priority">Priority Level</label>
+                    <select id="priority" class="form-select" aria-label="Priority">
+                        <option value="LOW">LOW</option>
+                        <option value="MEDIUM" selected>MEDIUM</option>
+                        <option value="HIGH">HIGH</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="status">Status</label>
+                    <select id="status" class="form-select" aria-label="Status">
+                        <option value="PENDING" selected>PENDING</option>
+                        <option value="COMPLETED">COMPLETED</option>
+                      </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</div>
+<script>
+    const title = document.querySelector("#title")
+    const description = document.querySelector("#description")
+    const priority = document.querySelector("#priority")
+    const status = document.querySelector("#status")
+    const createModal = document.getElementById("createModal");
+
+    const resetFormFields = () => {
+        title.value = "";
+        description.value = "";
+        priority.value = "MEDIUM"; // Reset to default selected value
+        status.value = "PENDING"; // Reset to default selected value
+    }
+
+    // Add reset when modal is hidden
+    createModal.addEventListener('hidden.bs.modal', function (event) {
+        resetFormFields();
+    });
+
+    document.getElementById("createForm").addEventListener("submit", function(e){
+        e.preventDefault()
+    
+        
+
+        
+        axios.post('/api/tasks/', {
+            title: title.value,
+            description: description.value,
+            priority: priority.value,
+            status: status.value,
+        })
+        .then(response=>{
+            console.log(response)
+            if(response.status == 201) {
+                alert("Task Created Successfully")
+            }
+            const modalInstance = bootstrap.Modal.getInstance(createModal) || new bootstrap.Modal(createModal);
+            modalInstance.hide();
+           
+        })
+        .catch(error => {
+          console.log(error)
+            alert(`Task Creation Failed: ${JSON.stringify(error.response.data) }`)
+        })
+    })
+</script>
+

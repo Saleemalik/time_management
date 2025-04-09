@@ -7,13 +7,19 @@
 <br>
 <br>
 <div class="container-lg">
-    <div >
+    <div>
         <div class="table-title w-auto">
-            <div class="row">
-                <div class="col-sm-8"><h2>Tasks <b>Details</b></h2></div>                
+            <div class="d-flex justify-content-between">
+                <div>
+                    <h2>Tasks <b>Details</b></h2>
+                </div>
+                <button class="btn btn-sm btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#createModal">New Task</button>
             </div>
+            {% include "createTask.html" %}
+            <!-- Modal -->
+           
         </div>
-        <table  class="table table-bordered">
+        <table class="table table-bordered">
             <thead>
                 <tr>
                     <th>productid</th>
@@ -25,8 +31,8 @@
                 </tr>
             </thead>
             <tbody id="task-body">
-            
-               
+
+
             </tbody>
         </table>
         <div class="text-center mt-3">
@@ -34,15 +40,15 @@
             <button id="next-btn" class="btn btn-primary">Next</button>
         </div>
         <!-- modal -->
-      
-    </div>
-<br>
 
-<script>
-    const tbody = document.getElementById('task-body')
-    let currentURL = '/api/tasks/'
-    const getTasks = tasks => {
-        tbody.innerHTML = ''
+    </div>
+    <br>
+
+    <script>
+        const tbody = document.getElementById('task-body')
+        let currentURL = '/api/tasks/'
+        const getTasks = tasks => {
+            tbody.innerHTML = ''
             tasks.forEach(task => {
                 const row = document.createElement('tr')
                 row.innerHTML = `
@@ -52,47 +58,47 @@
                 <td>${task.priority}</td>
                 <td>${task.status}</td>
                 <td>
-                    <button class="btn btn-sm btn-warning">Edit</button>
-                    <button class="btn btn-sm btn-danger">Delete</button>
+                    <button class="btn btn-sm btn-warning" onclick="editTask(${task.id})">Edit</button>
+                    <button class="btn btn-sm btn-danger" onclick="deleteTask(${task.id})">Delete</button>
                 </td>
                     `
                 tbody.appendChild(row)
             })
-    }
-    const updatePaginateBtn = (prev, next) => {
-        const prevBtn = document.getElementById("prev-btn")
-        const nextBtn = document.getElementById("next-btn")
-
-        prevBtn.disabled = !prev
-        nextBtn.disabled = !next
-
-        if(prev){
-            prevBtn.onclick = () => {
-                currentURL = prev
-                LoadUserTasks()
-            }
         }
-        if(next){
-            nextBtn.onclick = () => {
-                currentURL = next
-                LoadUserTasks()
+        const updatePaginateBtn = (prev, next) => {
+            const prevBtn = document.getElementById("prev-btn")
+            const nextBtn = document.getElementById("next-btn")
+
+            prevBtn.disabled = !prev
+            nextBtn.disabled = !next
+
+            if (prev) {
+                prevBtn.onclick = () => {
+                    currentURL = prev
+                    LoadUserTasks()
+                }
             }
+            if (next) {
+                nextBtn.onclick = () => {
+                    currentURL = next
+                    LoadUserTasks()
+                }
+            }
+
         }
-        
-    }
-    const LoadUserTasks = () => {
-        axios.get(currentURL).then(response => {
-            const tasks = response.data.results 
-            const previous = response.data.previous
-            const next = response.data.next
-            getTasks(tasks)
-            updatePaginateBtn(previous, next)
-        })
+        const LoadUserTasks = () => {
+            axios.get(currentURL).then(response => {
+                const tasks = response.data.results
+                const previous = response.data.previous
+                const next = response.data.next
+                getTasks(tasks)
+                updatePaginateBtn(previous, next)
+            })
 
-    }
-    
-    document.addEventListener('DOMContentLoaded', LoadUserTasks)
+        }
+
+        document.addEventListener('DOMContentLoaded', LoadUserTasks)
 
 
-</script>
-{% endblock %}
+    </script>
+    {% endblock %}
