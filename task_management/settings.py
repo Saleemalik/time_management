@@ -42,8 +42,8 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'rest_framework_simplejwt',
-    'taskapp'
-
+    'taskapp',
+    'corsheaders'
 ]
 
 CSRF_COOKIE_NAME = "csrftoken"
@@ -62,6 +62,7 @@ REST_FRAMEWORK = {
 }
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -70,6 +71,13 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+]
+
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(days=1),
