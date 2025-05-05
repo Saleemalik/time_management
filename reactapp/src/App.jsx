@@ -1,7 +1,7 @@
 import './App.css'
 import { Routes, Route, Link } from 'react-router-dom';
-import Login from "./pages/login";
-import Home from "./pages/home";
+import Login from "./pages/Login";
+import Home from "./pages/Home";
 
 function About() {
   return <h2>About Page</h2>;
