@@ -9,9 +9,17 @@ const instance = axios.create({
 });
 
 // Attach token if available
-const token = localStorage.getItem('accessToken');
-if (token) {
-  instance.defaults.headers['Authorization'] = `Bearer ${token}`;
-}
+instance.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('accessToken');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    } else {
+      delete config.headers.Authorization;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
 
 export default instance;
