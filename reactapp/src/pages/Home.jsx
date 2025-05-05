@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from '../api/axios'; // use the custom instance we set up earlier
 import { useNavigate } from 'react-router-dom';
 import CreateTaskModal from './CreateTaskModal';
+import EditTaskModal from './EditTaskModal';
 
 const Home = () => {
   const [username, setUsername] = useState('');
@@ -10,6 +11,9 @@ const Home = () => {
   const [currentURL, setCurrentURL] = useState('/api/tasks/');
   const [pagination, setPagination] = useState({ previous: null, next: null });
   const navigate = useNavigate();
+  const [editingTaskId, setEditingTaskId] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
+
 
   useEffect(() => {
     loadUser();
@@ -43,6 +47,24 @@ const Home = () => {
     } catch (err) {
       alert('Failed to create task');
     }
+  };
+
+  const onUpdateTask = async () => {
+    try {
+      loadTasks(currentURL);
+    } catch (err) {
+      alert('Failed to Load task');
+    }
+  };
+
+  const handleEditClick = (taskId) => {
+    setEditingTaskId(taskId);
+    setShowEditModal(true);
+  };
+
+  const closeEditModal = () => {
+    setShowEditModal(false);
+    setEditingTaskId(null);
   };
 
   const handleLogout = () => {
@@ -104,12 +126,18 @@ const Home = () => {
               <td>{task.priority}</td>
               <td>{task.status}</td>
               <td>
-                <button className="btn btn-sm btn-warning me-2">Edit</button>
+                <button className="btn btn-sm btn-warning me-2" onClick={() => handleEditClick(task.id)}>Edit</button>
                 <button className="btn btn-sm btn-danger" onClick={() => handleDelete(task.id)}>Delete</button>
               </td>
             </tr>
           ))}
         </tbody>
+        <EditTaskModal
+          show={showEditModal}
+          onClose={closeEditModal}
+          taskId={editingTaskId}
+          onTaskUpdated={onUpdateTask}
+        />
       </table>
 
       <div className="text-center mt-3">
