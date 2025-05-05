@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from '../api/axios'; // use the custom instance we set up earlier
 import { useNavigate } from 'react-router-dom';
+import CreateTaskModal from './CreateTaskModal';
 
 const Home = () => {
   const [username, setUsername] = useState('');
   const [tasks, setTasks] = useState([]);
+  const [showModal, setShowModal] = useState(false);
   const [currentURL, setCurrentURL] = useState('/api/tasks/');
   const [pagination, setPagination] = useState({ previous: null, next: null });
   const navigate = useNavigate();
@@ -31,6 +33,15 @@ const Home = () => {
       setPagination({ previous: res.data.previous, next: res.data.next });
     } catch (err) {
       console.error(err.response?.data);
+    }
+  };
+
+  const handleCreateTask = async (taskData) => {
+    try {
+      await axios.post("/api/tasks/", taskData);
+      loadTasks(currentURL);
+    } catch (err) {
+      alert('Failed to create task');
     }
   };
 
@@ -62,7 +73,15 @@ const Home = () => {
       <hr />
       <div className="d-flex justify-content-between mb-3">
         <h2>Tasks <b>Details</b></h2>
-        <button className="btn btn-sm btn-primary">New Task</button> {/* You can open a modal here */}
+        <button className="btn btn-sm btn-primary" onClick={() => setShowModal(true)}>
+        New Task
+      </button>
+      <CreateTaskModal
+        show={showModal}
+        handleClose={() => setShowModal(false)}
+        onSubmit={handleCreateTask}
+      />
+        
       </div>
 
       <table className="table table-bordered">
