@@ -25,7 +25,6 @@ const Home = () => {
       const res = await axios.get('/user/me/');
       setUsername(res.data.username);
     } catch (err) {
-      alert('Please log in.');
       navigate('/login');
     }
   };
@@ -96,13 +95,13 @@ const Home = () => {
       <div className="d-flex justify-content-between mb-3">
         <h2>Tasks <b>Details</b></h2>
         <button className="btn btn-sm btn-primary" onClick={() => setShowModal(true)}>
-        New Task
-      </button>
-      <CreateTaskModal
-        show={showModal}
-        handleClose={() => setShowModal(false)}
-        onSubmit={handleCreateTask}
-      />
+          New Task
+        </button>
+        <CreateTaskModal
+          show={showModal}
+          handleClose={() => setShowModal(false)}
+          onSubmit={handleCreateTask}
+        />
         
       </div>
 

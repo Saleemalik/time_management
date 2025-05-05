@@ -20,8 +20,6 @@ export default function Login() {
       const { access, refresh } = response.data;
       localStorage.setItem("accessToken", access);
       localStorage.setItem("refreshToken", refresh);
-
-      alert("Login Successful");
       navigate("/");
     } catch (error) {
       alert("Login Failed");
